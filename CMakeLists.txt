@@ -19,16 +19,37 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
+include_directories(include)
+ament_export_include_directories(include)
+
 add_executable(listener1 src/listener1.cpp)
 ament_target_dependencies(listener1 rclcpp std_msgs)
 
+add_library(${PROJECT_NAME} SHARED
+    src/kfj_listener2.cpp
+    )
+ament_target_dependencies(${PROJECT_NAME}
+    "rclcpp"
+    "std_msgs"
+    )
+
+ament_export_libraries(${PROJECT_NAME})
 add_executable(listener2 src/listener2.cpp)
+target_link_libraries(listener2 ${PROJECT_NAME})
 ament_target_dependencies(listener2 rclcpp std_msgs)
 
 install(TARGETS
     listener1
     listener2
-    DESTINATION lib/${PROJECT_NAME}
-)
+    ${PROJECT_NAME}
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+    )
+
+install(
+    DIRECTORY include/
+    DESTINATION include
+    )
 
 ament_package()

@@ -22,8 +22,12 @@ find_package(std_msgs REQUIRED)
 add_executable(listener1 src/listener1.cpp)
 ament_target_dependencies(listener1 rclcpp std_msgs)
 
+add_executable(listener2 src/listener2.cpp)
+ament_target_dependencies(listener2 rclcpp std_msgs)
+
 install(TARGETS
     listener1
+    listener2
     DESTINATION lib/${PROJECT_NAME}
 )
 
